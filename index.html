@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>선생님의 하루 - 교사용 마음챙김 & 일과 관리 타이머</title>
+  <!-- Pretendard 폰트 로드 (네트워크 불가 시 시스템 폰트 완벽 폴백) -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      
+      /* 라이트 모드 (따뜻하고 차분한 소프트 웜 톤) */
+      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e8edf3 100%);
+      --surface-card: rgba(255, 255, 255, 0.85);
+      --surface-border: rgba(226, 232, 240, 0.9);
+      --surface-hover: rgba(248, 250, 252, 0.95);
+      --text-main: #1e293b;
+      --text-sub: #64748b;
+      --text-muted: #94a3b8;
+      
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-soft: rgba(79, 70, 229, 0.1);
+      
+      --teal: #0d9488;
+      --teal-soft: rgba(13, 148, 136, 0.12);
+      
+      --accent-orange: #ea580c;
+      --accent-green: #16a34a;
+      --accent-blue: #2563eb;
+      
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.08);
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+    }
+
+    [data-theme="dark"] {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --surface-card: rgba(30, 41, 59, 0.8);
+      --surface-border: rgba(51, 65, 85, 0.7);
+      --surface-hover: rgba(51, 65, 85, 0.9);
+      --text-main: #f8fafc;
+      --text-sub: #cbd5e1;
+      --text-muted: #64748b;
+      
+      --primary: #6366f1;
+      --primary-hover: #818cf8;
+      --primary-soft: rgba(99, 102, 241, 0.2);
+      
+      --teal: #14b8a6;
+      --teal-soft: rgba(20, 184, 166, 0.2);
+      
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      transition: background 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    /* 시각적 무음 알림 플래시 효과 */
+    .flash-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      box-shadow: inset 0 0 80px 30px rgba(99, 102, 241, 0.45);
+    }
+    .flash-overlay.active {
+      opacity: 1;
+      animation: pulse-flash 1.2s infinite alternate;
+    }
+    @keyframes pulse-flash {
+      0% { opacity: 0.3; }
+      100% { opacity: 0.9; }
+    }
+
+    /* 상단 네비게이션 헤더 */
+    .app-header {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: var(--surface-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid var(--surface-border);
+      color: var(--text-sub);
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-icon:hover {
+      background: var(--surface-hover);
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
+    /* 메인 컨테이너 */
+    .main-grid {
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 카드 베이스 */
+    .card {
+      background: var(--surface-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* 프리셋 탭 바 */
+    .preset-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+      scrollbar-width: thin;
+    }
+
+    .preset-btn {
+      flex: 0 0 auto;
+      padding: 8px 14px;
+      background: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .preset-btn:hover {
+      color: var(--text-main);
+      border-color: var(--primary);
+    }
+    .preset-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
+    }
+
+    /* 타이머 디스플레이 */
+    .timer-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 0 32px;
+      position: relative;
+    }
+
+    .circle-wrap {
+      position: relative;
+      width: 290px;
+      height: 290px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circle-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: var(--surface-border);
+      stroke-width: 10;
+    }
+
+    .circle-progress {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.4s ease, stroke 0.4s ease;
+    }
+
+    /* 호흡 가이드 원형 애니메이션 펄스 */
+    .breathing-bubble {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: var(--teal-soft);
+      border: 2px dashed var(--teal);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      transition: transform 4s ease-in-out, background 0.5s ease;
+      pointer-events: none;
+    }
+    .breathing-bubble.active {
+      display: flex;
+    }
+
+    .timer-text-wrap {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .timer-display {
+      font-size: 4rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .timer-mode-badge {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-radius: var(--radius-full);
+      display: inline-block;
+    }
+
+    .timer-breath-guide {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--teal);
+      height: 22px;
+    }
+
+    /* 타이머 컨트롤 버튼 */
+    .timer-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .btn-main {
+      padding: 14px 32px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-full);
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-main:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45);
+    }
+    .btn-main:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      padding: 12px 18px;
+      background: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      color: var(--text-main);
+      border-radius: var(--radius-full);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-secondary:hover {
+      background: var(--surface-border);
+    }
+
+    .shortcut-hint {
+      margin-top: 16px;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .shortcut-hint kbd {
+      background: var(--surface-border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: bold;
+    }
+
+    /* 오른쪽 패널 (할일 & 마음 챙김) */
+    .tab-nav {
+      display: flex;
+      border-bottom: 1px solid var(--surface-border);
+      margin-bottom: 18px;
+      gap: 16px;
+    }
+
+    .tab-btn {
+      padding: 10px 4px;
+      background: none;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+    .tab-btn.active {
+      color: var(--primary);
+    }
+    .tab-btn.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* 탭 콘텐츠 */
+    .tab-pane {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+    }
+    .tab-pane.active {
+      display: flex;
+    }
+
+    /* 할일 영역 */
+    .todo-input-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .category-select {
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--surface-border);
+      background: var(--surface-hover);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .todo-input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--surface-border);
+      background: var(--surface-hover);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .todo-input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-add {
+      padding: 10px 16px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    /* 교직 추천 빠른 템플릿 */
+    .quick-template-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .chip {
+      font-size: 0.74rem;
+      padding: 4px 10px;
+      background: var(--surface-hover);
+      border: 1px dashed var(--surface-border);
+      border-radius: var(--radius-full);
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .chip:hover {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .todo-list {
+      list-style: none;
+      overflow-y: auto;
+      max-height: 340px;
+      padding-right: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--surface-hover);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+    .todo-item:hover {
+      border-color: var(--primary-soft);
+    }
+
+    .todo-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .todo-item.completed .todo-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .category-badge {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-class { background: rgba(22, 163, 74, 0.12); color: #15803d; }
+    .badge-admin { background: rgba(37, 99, 235, 0.12); color: #1d4ed8; }
+    .badge-counsel { background: rgba(234, 88, 12, 0.12); color: #c2410c; }
+
+    .todo-btn-del {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+    }
+    .todo-btn-del:hover {
+      color: #ef4444;
+    }
+
+    /* 마음 챙김 일지 탭 */
+    .mind-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mood-selector {
+      display: flex;
+      justify-content: space-between;
+      background: var(--surface-hover);
+      padding: 10px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--surface-border);
+    }
+
+    .mood-btn {
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .mood-btn:hover {
+      transform: scale(1.2);
+    }
+    .mood-btn.selected {
+      background: var(--primary-soft);
+      transform: scale(1.15);
+    }
+
+    .journal-textarea {
+      width: 100%;
+      height: 90px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--surface-border);
+      background: var(--surface-hover);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.88rem;
+      resize: none;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .journal-textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .journal-history {
+      margin-top: 10px;
+      overflow-y: auto;
+      max-height: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .journal-entry {
+      font-size: 0.8rem;
+      padding: 10px 12px;
+      background: var(--surface-hover);
+      border-left: 3px solid var(--teal);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .journal-meta {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* 전자칠판 전체화면 모드 */
+    body.fullscreen-mode {
+      padding: 0;
+    }
+    body.fullscreen-mode .app-header,
+    body.fullscreen-mode .main-grid > .card:nth-child(2) {
+      display: none;
+    }
+    body.fullscreen-mode .main-grid {
+      grid-template-columns: 1fr;
+      max-width: 100vw;
+      height: 100vh;
+      margin: 0;
+    }
+    body.fullscreen-mode .card {
+      border-radius: 0;
+      border: none;
+      justify-content: center;
+      align-items: center;
+    }
+    body.fullscreen-mode .circle-wrap {
+      width: 440px;
+      height: 440px;
+    }
+    body.fullscreen-mode .timer-display {
+      font-size: 6.5rem;
+    }
+    body.fullscreen-mode .fullscreen-exit-btn {
+      display: flex !important;
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+    }
+    .fullscreen-exit-btn {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 시각적 무음 알림 플래시 레이어 -->
+  <div id="flashOverlay" class="flash-overlay"></div>
+
+  <!-- 상단 네비게이션 헤더 -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-icon">🌱</div>
+      <div>
+        <div class="brand-title">선생님의 하루</div>
+        <div class="brand-subtitle" id="currentDateStr">교사용 마음챙김 & 일과 관리 타이머</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <!-- 은은한 차임벨 테스트 버튼 -->
+      <button class="btn-icon" id="btnTestSound" title="싱잉볼 종소리 테스트" aria-label="사운드 테스트">
+        🔔
+      </button>
+      <!-- 무음 알림 토글 -->
+      <button class="btn-icon" id="btnToggleMute" title="소리 켜기/끄기 (무음 시 시각적 플래시로 작동)" aria-label="무음 모드 토글">
+        🔊
+      </button>
+      <!-- 전자칠판 전체화면 모드 -->
+      <button class="btn-icon" id="btnFullscreen" title="전자칠판 전체화면 모드 (단축키: F)" aria-label="전체화면">
+        ⛶
+      </button>
+      <!-- 다크모드 토글 -->
+      <button class="btn-icon" id="btnToggleTheme" title="다크/라이트 모드 전환" aria-label="테마 전환">
+        🌓
+      </button>
+    </div>
+  </header>
+
+  <!-- 전체화면 탈출 버튼 -->
+  <button id="btnExitFullscreen" class="btn-secondary fullscreen-exit-btn">
+    ✕ 전체화면 닫기 (ESC)
+  </button>
+
+  <!-- 메인 2분할 레이아웃 -->
+  <main class="main-grid">
+    
+    <!-- 왼쪽: 타이머 & 마음챙김 센터 -->
+    <section class="card" aria-label="타이머 및 마음챙김 영역">
+      <!-- 교직 맞춤 프리셋 바 -->
+      <div class="preset-bar" role="tablist">
+        <button class="preset-btn active" data-preset="breath3" role="tab">🧘 수업 전 3분 쉼</button>
+        <button class="preset-btn" data-preset="recess10" role="tab">☕ 쉬는시간 10분 리프레시</button>
+        <button class="preset-btn" data-preset="class40" role="tab">🎒 초등수업 40분</button>
+        <button class="preset-btn" data-preset="class45" role="tab">📚 중등수업 45분</button>
+        <button class="preset-btn" data-preset="class50" role="tab">🎓 고등수업 50분</button>
+        <button class="preset-btn" data-preset="admin25" role="tab">📋 방과후 행정 25분</button>
+      </div>
+
+      <!-- 타이머 및 호흡 디스플레이 -->
+      <div class="timer-center">
+        <div class="circle-wrap">
+          <svg class="circle-svg" viewBox="0 0 100 100">
+            <circle class="circle-bg" cx="50" cy="50" r="44"></circle>
+            <circle class="circle-progress" id="timerProgress" cx="50" cy="50" r="44"
+                    stroke-dasharray="276.46" stroke-dashoffset="0"></circle>
+          </svg>
+          
+          <!-- 호흡 유도 버블 (수업 전 쉼/쉬는시간 호흡 모드 시 활성화) -->
+          <div class="breathing-bubble" id="breathingBubble"></div>
+
+          <!-- 타이머 텍스트 -->
+          <div class="timer-text-wrap">
+            <div class="timer-display" id="timeDisplay">03:00</div>
+            <div class="timer-mode-badge" id="modeBadge">수업 전 3분 쉼</div>
+            <div class="timer-breath-guide" id="breathGuideText">차분히 숨을 고르세요</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 타이머 조작 버튼 그룹 -->
+      <div class="timer-controls">
+        <button class="btn-secondary" id="btnSubMinute" title="1분 빼기">-1분</button>
+        <button class="btn-main" id="btnToggleTimer">
+          <span id="btnTimerIcon">▶</span>
+          <span id="btnTimerLabel">시작하기</span>
+        </button>
+        <button class="btn-secondary" id="btnAddMinute" title="1분 더하기">+1분</button>
+        <button class="btn-secondary" id="btnResetTimer" title="원클릭 즉시 리셋 (ESC)">초기화</button>
+      </div>
+
+      <div class="shortcut-hint">
+        단축키: <kbd>Space</kbd> 시작/정지 &nbsp;|&nbsp; <kbd>Esc</kbd> 즉시 초기화 &nbsp;|&nbsp; <kbd>F</kbd> 전자칠판 전체화면
+      </div>
+    </section>
+
+    <!-- 오른쪽: 교직 업무 & 마음 웰니스 -->
+    <section class="card" aria-label="할일 및 마음 기록 영역">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tabTodo">📋 교직 할 일 (To-Do)</button>
+        <button class="tab-btn" data-tab="tabMind">🌱 오늘의 마음 챙김 일지</button>
+      </div>
+
+      <!-- 탭 1: 할 일 목록 -->
+      <div class="tab-pane active" id="tabTodo">
+        <!-- 빠른 템플릿 칩 -->
+        <div class="quick-template-chips">
+          <span class="chip" data-template="나이스 출결 마감">[공문] 나이스 출결 마감</span>
+          <span class="chip" data-template="수업 학습지 인쇄">[수업] 수업 학습지 인쇄</span>
+          <span class="chip" data-template="학부모 상담일지 정리">[상담] 상담일지 정리</span>
+          <span class="chip" data-template="가정통신문 발송 확인">[행정] 가정통신문 확인</span>
+        </div>
+
+        <!-- 할일 입력 -->
+        <form class="todo-input-group" id="todoForm">
+          <select class="category-select" id="todoCategory">
+            <option value="class">수업 준비</option>
+            <option value="admin">행정 공문</option>
+            <option value="counsel">학생/상담</option>
+          </select>
+          <input type="text" class="todo-input" id="todoInput" placeholder="오늘 완수할 교직 업무를 입력하세요..." required>
+          <button type="submit" class="btn-add">추가</button>
+        </form>
+
+        <!-- 할일 리스트 -->
+        <ul class="todo-list" id="todoList">
+          <!-- JS 렌더링 -->
+        </ul>
+      </div>
+
+      <!-- 탭 2: 마음 챙김 일지 -->
+      <div class="tab-pane" id="tabMind">
+        <div class="mind-card">
+          <div>
+            <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">오늘 선생님의 마음 상태는 어떤가요?</div>
+            <div class="mood-selector" id="moodSelector">
+              <button class="mood-btn" data-mood="맑음" title="활기차고 맑음">☀️</button>
+              <button class="mood-btn selected" data-mood="차분함" title="평온하고 차분함">🌿</button>
+              <button class="mood-btn" data-mood="고단함" title="에너지가 필요함">☕</button>
+              <button class="mood-btn" data-mood="지침" title="마음이 지친 날">🌧️</button>
+              <button class="mood-btn" data-mood="휴식필요" title="완전한 휴식이 필요함">🌙</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">수업 후 나를 위한 칭찬 또는 한 줄 회고</div>
+            <textarea class="journal-textarea" id="journalInput" placeholder="오늘도 아이들을 위해 최선을 다한 나에게 따뜻한 한 줄을 남겨주세요."></textarea>
+            <button class="btn-secondary" id="btnSaveJournal" style="margin-top: 8px; width: 100%; justify-content: center;">
+              💾 마음 일지 안전하게 기록하기 (로컬 저장)
+            </button>
+          </div>
+
+          <div style="font-size: 0.85rem; font-weight: 600; margin-top: 4px;">최근 마음 기록</div>
+          <div class="journal-history" id="journalHistory">
+            <!-- JS 렌더링 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    /**
+     * =========================================================================
+     * [0단계: 시스템 아키텍처 및 공통 상태 인터페이스 (State Contract)]
+     * =========================================================================
+     */
+    const AppState = {
+      // 타이머 상태
+      timer: {
+        preset: 'breath3',      // 'breath3' | 'recess10' | 'class40' | 'class45' | 'class50' | 'admin25'
+        totalSeconds: 180,      // 총 설정 시간 (초)
+        remainingSeconds: 180,  // 남은 시간 (초)
+        isRunning: false,       // 실행 여부
+        targetEndTime: null,    // 브라우저 스로틀링 보정용 목표 종료 타임스탬프
+        intervalId: null,       // interval 핸들러
+        isBreathingMode: true   // 호흡 가이드 연동 여부
+      },
+      // 호흡 애니메이션 상태 (4-7-8 호흡 사이클)
+      breathing: {
+        phase: 'inhale', // 'inhale'(4s) -> 'hold'(7s) -> 'exhale'(8s)
+        cycleTimer: null,
+        phaseTimeLeft: 4
+      },
+      // 환경 설정 (로컬 저장)
+      settings: {
+        theme: 'light',         // 'light' | 'dark'
+        soundEnabled: true,     // Web Audio API 소리 재생 여부 (false면 시각적 무음 플래시만)
+        isMuted: false
+      },
+      // 교직 할일 목록
+      todos: [],
+      // 마음챙김 일지 목록
+      mindRecords: []
+    };
+
+    /**
+     * =========================================================================
+     * [Agent A — 코어 로직 & 정밀 타이머 엔진 (Core Logic & State Engine)]
+     * =========================================================================
+     */
+    const TimerEngine = {
+      PRESETS: {
+        breath3:  { name: '수업 전 3분 쉼', seconds: 180, isBreathing: true, badgeClass: 'badge-counsel' },
+        recess10: { name: '쉬는시간 10분 리프레시', seconds: 600, isBreathing: true, badgeClass: 'badge-class' },
+        class40:  { name: '초등수업 40분', seconds: 2400, isBreathing: false, badgeClass: 'badge-admin' },
+        class45:  { name: '중등수업 45분', seconds: 2700, isBreathing: false, badgeClass: 'badge-admin' },
+        class50:  { name: '고등수업 50분', seconds: 3000, isBreathing: false, badgeClass: 'badge-admin' },
+        admin25:  { name: '방과후 행정 25분', seconds: 1500, isBreathing: false, badgeClass: 'badge-counsel' }
+      },
+
+      init() {
+        this.selectPreset('breath3');
+      },
+
+      selectPreset(presetKey) {
+        if (AppState.timer.isRunning) {
+          this.pause();
+        }
+        const conf = this.PRESETS[presetKey];
+        if (!conf) return;
+
+        AppState.timer.preset = presetKey;
+        AppState.timer.totalSeconds = conf.seconds;
+        AppState.timer.remainingSeconds = conf.seconds;
+        AppState.timer.isBreathingMode = conf.isBreathing;
+
+        UIController.updateTimerDisplay();
+        UIController.updatePresetButtons(presetKey);
+
+        if (conf.isBreathing) {
+          BreathingController.reset();
+        } else {
+          BreathingController.stop();
+        }
+      },
+
+      toggle() {
+        if (AppState.timer.isRunning) {
+          this.pause();
+        } else {
+          this.start();
+        }
+      },
+
+      start() {
+        if (AppState.timer.remainingSeconds <= 0) {
+          AppState.timer.remainingSeconds = AppState.timer.totalSeconds;
+        }
+
+        AppState.timer.isRunning = true;
+        AppState.timer.targetEndTime = Date.now() + (AppState.timer.remainingSeconds * 1000);
+
+        // 정밀 드리프트 보정 타이머 루프 (백그라운드 스로틀링 대응)
+        clearInterval(AppState.timer.intervalId);
+        AppState.timer.intervalId = setInterval(() => {
+          this.tick();
+        }, 200);
+
+        if (AppState.timer.isBreathingMode) {
+          BreathingController.start();
+        }
+
+        UIController.updateControlsState(true);
+      },
+
+      pause() {
+        AppState.timer.isRunning = false;
+        clearInterval(AppState.timer.intervalId);
+        AppState.timer.intervalId = null;
+
+        if (AppState.timer.isBreathingMode) {
+          BreathingController.pause();
+        }
+
+        UIController.updateControlsState(false);
+      },
+
+      reset() {
+        this.pause();
+        AppState.timer.remainingSeconds = AppState.timer.totalSeconds;
+        UIController.updateTimerDisplay();
+        BreathingController.reset();
+        NotificationEngine.stopFlash();
+      },
+
+      adjustMinutes(deltaMinutes) {
+        const deltaSeconds = deltaMinutes * 60;
+        const newSec = Math.max(60, AppState.timer.remainingSeconds + deltaSeconds);
+        AppState.timer.remainingSeconds = newSec;
+        AppState.timer.totalSeconds = Math.max(AppState.timer.totalSeconds, newSec);
+        if (AppState.timer.isRunning) {
+          AppState.timer.targetEndTime = Date.now() + (AppState.timer.remainingSeconds * 1000);
+        }
+        UIController.updateTimerDisplay();
+      },
+
+      tick() {
+        const now = Date.now();
+        const diffMs = AppState.timer.targetEndTime - now;
+        const remaining = Math.max(0, Math.ceil(diffMs / 1000));
+
+        AppState.timer.remainingSeconds = remaining;
+        UIController.updateTimerDisplay();
+
+        if (remaining <= 0) {
+          this.complete();
+        }
+      },
+
+      complete() {
+        this.pause();
+        AppState.timer.remainingSeconds = 0;
+        UIController.updateTimerDisplay();
+        NotificationEngine.notify();
+      }
+    };
+
+    /**
+     * =========================================================================
+     * [Agent B — 사운드 합성 & 마이크로 인터랙션 (Sound & Micro-Interactions)]
+     * =========================================================================
+     */
+    const AudioEngine = {
+      audioCtx: null,
+
+      initContext() {
+        if (!this.audioCtx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.audioCtx = new AudioContext();
+          }
+        }
+        if (this.audioCtx && this.audioCtx.state === 'suspended') {
+          this.audioCtx.resume();
+        }
+      },
+
+      // Web Audio API 기반 티베탄 싱잉볼 / 명상 종소리 합성 (외부 오디오 파일 불필요)
+      playSingingBowl() {
+        try {
+          this.initContext();
+          if (!this.audioCtx) return;
+
+          const now = this.audioCtx.currentTime;
+          
+          // 기본 화음 구성 (맑고 차분한 F#음 기준: 370Hz, 배음 740Hz, 1110Hz)
+          const baseFreq = 370;
+          const harmonics = [
+            { freq: baseFreq, gain: 0.5, decay: 3.5 },
+            { freq: baseFreq * 2.01, gain: 0.25, decay: 2.8 },
+            { freq: baseFreq * 3.02, gain: 0.12, decay: 2.0 },
+            { freq: baseFreq * 4.5, gain: 0.05, decay: 1.5 }
+          ];
+
+          harmonics.forEach(h => {
+            const osc = this.audioCtx.createOscillator();
+            const gainNode = this.audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(h.freq, now);
+
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(h.gain, now + 0.04);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + h.decay);
+
+            osc.connect(gainNode);
+            gainNode.connect(this.audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + h.decay);
+          });
+        } catch (e) {
+          console.warn('Web Audio Playback failed:', e);
+        }
+      }
+    };
+
+    /**
+     * 호흡 가이드 컨트롤러 (4-7-8 호흡 테크닉)
+     */
+    const BreathingController = {
+      timerId: null,
+      phases: [
+        { name: '들이마시기 (코로 깊게)', duration: 4, scale: 1.35, text: '숨을 천천히 들이마십니다 (4초)' },
+        { name: '멈추기 (편안하게 유지)', duration: 7, scale: 1.35, text: '숨을 멈추고 온몸을 이완합니다 (7초)' },
+        { name: '내쉬기 (입으로 천천히)', duration: 8, scale: 0.85, text: '입으로 부드럽게 숨을 내쉽니다 (8초)' }
+      ],
+      currentIdx: 0,
+      phaseTimeLeft: 4,
+
+      start() {
+        const bubble = document.getElementById('breathingBubble');
+        bubble.classList.add('active');
+        this.runPhase();
+      },
+
+      pause() {
+        clearTimeout(this.timerId);
+      },
+
+      reset() {
+        this.pause();
+        this.currentIdx = 0;
+        const bubble = document.getElementById('breathingBubble');
+        if (AppState.timer.isBreathingMode) {
+          bubble.classList.add('active');
+          bubble.style.transform = 'scale(1)';
+          document.getElementById('breathGuideText').textContent = '차분히 숨을 고르세요';
+        } else {
+          bubble.classList.remove('active');
+          document.getElementById('breathGuideText').textContent = '수업 및 집중 업무 시간';
+        }
+      },
+
+      stop() {
+        this.pause();
+        const bubble = document.getElementById('breathingBubble');
+        bubble.classList.remove('active');
+        document.getElementById('breathGuideText').textContent = '수업 및 집중 업무 시간';
+      },
+
+      runPhase() {
+        if (!AppState.timer.isRunning || !AppState.timer.isBreathingMode) return;
+
+        const cur = this.phases[this.currentIdx];
+        const bubble = document.getElementById('breathingBubble');
+        const guideText = document.getElementById('breathGuideText');
+
+        guideText.textContent = cur.text;
+        bubble.style.transition = `transform ${cur.duration}s cubic-bezier(0.4, 0, 0.2, 1)`;
+        bubble.style.transform = `scale(${cur.scale})`;
+
+        this.timerId = setTimeout(() => {
+          this.currentIdx = (this.currentIdx + 1) % this.phases.length;
+          this.runPhase();
+        }, cur.duration * 1000);
+      }
+    };
+
+    /**
+     * 알림 엔진 (시각적 플래시 및 무음 토스트)
+     */
+    const NotificationEngine = {
+      notify() {
+        // 시각적 무음 알림 플래시
+        const overlay = document.getElementById('flashOverlay');
+        overlay.classList.add('active');
+
+        // 소리가 활성화되어 있다면 종소리 재생
+        if (AppState.settings.soundEnabled && !AppState.settings.isMuted) {
+          AudioEngine.playSingingBowl();
+        }
+
+        // 3초 후 시각 플래시 자동 해제
+        setTimeout(() => {
+          this.stopFlash();
+        }, 3600);
+      },
+
+      stopFlash() {
+        const overlay = document.getElementById('flashOverlay');
+        overlay.classList.remove('active');
+      }
+    };
+
+    /**
+     * =========================================================================
+     * [Agent C — 교직 특화 데이터 모델 & 안전성 검증 (Storage & Context)]
+     * =========================================================================
+     */
+    const StorageEngine = {
+      KEYS: {
+        TODOS: 'teacher_mind_todos_v1',
+        JOURNAL: 'teacher_mind_journal_v1',
+        THEME: 'teacher_mind_theme_v1'
+      },
+
+      load() {
+        try {
+          const todosStr = localStorage.getItem(this.KEYS.TODOS);
+          AppState.todos = todosStr ? JSON.parse(todosStr) : this.getDefaultTodos();
+
+          const journalStr = localStorage.getItem(this.KEYS.JOURNAL);
+          AppState.mindRecords = journalStr ? JSON.parse(journalStr) : this.getDefaultJournal();
+
+          const savedTheme = localStorage.getItem(this.KEYS.THEME) || 'light';
+          AppState.settings.theme = savedTheme;
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } catch (e) {
+          console.warn('LocalStorage access issue, fallback to memory', e);
+          AppState.todos = this.getDefaultTodos();
+          AppState.mindRecords = this.getDefaultJournal();
+        }
+      },
+
+      saveTodos() {
+        try {
+          localStorage.setItem(this.KEYS.TODOS, JSON.stringify(AppState.todos));
+        } catch (e) { console.error(e); }
+      },
+
+      saveJournal() {
+        try {
+          localStorage.setItem(this.KEYS.JOURNAL, JSON.stringify(AppState.mindRecords));
+        } catch (e) { console.error(e); }
+      },
+
+      saveTheme(theme) {
+        try {
+          localStorage.setItem(this.KEYS.THEME, theme);
+        } catch (e) {}
+      },
+
+      getDefaultTodos() {
+        return [
+          { id: 1, text: '수업 10분 전 교실 칠판 정리 및 교재 준비', category: 'class', completed: false },
+          { id: 2, text: '오늘 결석생 나이스(NEIS) 출결 마감', category: 'admin', completed: false },
+          { id: 3, text: '마음이 지친 학생 1명 따뜻한 눈맞춤 인사', category: 'counsel', completed: true }
+        ];
+      },
+
+      getDefaultJournal() {
+        const today = new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
+        return [
+          { id: 1, date: today, mood: '🌿', note: '수업 시간에 소란스러웠지만 화내지 않고 차분히 기다려주었다. 나 자신 칭찬해.' }
+        ];
+      }
+    };
+
+    /**
+     * =========================================================================
+     * [UI 컨트롤러 및 뷰 바인딩 (UI Controller)]
+     * =========================================================================
+     */
+    const UIController = {
+      circumference: 2 * Math.PI * 44, // 276.46
+
+      init() {
+        this.renderDate();
+        this.bindEvents();
+        this.renderTodos();
+        this.renderJournal();
+        this.updateTimerDisplay();
+      },
+
+      renderDate() {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        document.getElementById('currentDateStr').textContent = now.toLocaleDateString('ko-KR', options);
+      },
+
+      formatTime(seconds) {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      },
+
+      updateTimerDisplay() {
+        const display = document.getElementById('timeDisplay');
+        const progress = document.getElementById('timerProgress');
+        const badge = document.getElementById('modeBadge');
+
+        const remaining = AppState.timer.remainingSeconds;
+        const total = AppState.timer.totalSeconds;
+
+        display.textContent = this.formatTime(remaining);
+
+        // 원형 진행률 계산
+        const ratio = total > 0 ? remaining / total : 0;
+        const offset = this.circumference * (1 - ratio);
+        progress.style.strokeDashoffset = offset;
+
+        // 모드 뱃지
+        const conf = TimerEngine.PRESETS[AppState.timer.preset];
+        if (conf) {
+          badge.textContent = conf.name;
+        }
+
+        // 브라우저 탭 타이틀에 남은 시간 표시
+        document.title = `${this.formatTime(remaining)} - 선생님의 하루`;
+      },
+
+      updateControlsState(isRunning) {
+        const icon = document.getElementById('btnTimerIcon');
+        const label = document.getElementById('btnTimerLabel');
+        const btnMain = document.getElementById('btnToggleTimer');
+
+        if (isRunning) {
+          icon.textContent = '⏸';
+          label.textContent = '일시정지';
+          btnMain.style.background = '#ea580c'; // 일시정지 시 차분한 오렌지
+        } else {
+          icon.textContent = '▶';
+          label.textContent = '시작하기';
+          btnMain.style.background = '';
+        }
+      },
+
+      updatePresetButtons(activeKey) {
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+          if (btn.dataset.preset === activeKey) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+      },
+
+      renderTodos() {
+        const list = document.getElementById('todoList');
+        list.innerHTML = '';
+
+        if (AppState.todos.length === 0) {
+          list.innerHTML = `<li style="text-align: center; color: var(--text-muted); padding: 24px; font-size: 0.85rem;">
+            등록된 할일이 없습니다. 여유로운 마음으로 하루를 보내세요. 🌱
+          </li>`;
+          return;
+        }
+
+        AppState.todos.forEach(todo => {
+          const li = document.createElement('li');
+          li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+          
+          let badgeText = '수업';
+          let badgeClass = 'badge-class';
+          if (todo.category === 'admin') {
+            badgeText = '행정';
+            badgeClass = 'badge-admin';
+          } else if (todo.category === 'counsel') {
+            badgeText = '상담';
+            badgeClass = 'badge-counsel';
+          }
+
+          li.innerHTML = `
+            <div class="todo-item-left">
+              <input type="checkbox" ${todo.completed ? 'checked' : ''} data-id="${todo.id}" style="cursor: pointer; width: 16px; height: 16px;">
+              <span class="category-badge ${badgeClass}">${badgeText}</span>
+              <span class="todo-text" style="font-size: 0.88rem;">${this.escapeHtml(todo.text)}</span>
+            </div>
+            <button class="todo-btn-del" data-id="${todo.id}" title="삭제">✕</button>
+          `;
+          list.appendChild(li);
+        });
+      },
+
+      renderJournal() {
+        const history = document.getElementById('journalHistory');
+        history.innerHTML = '';
+
+        if (AppState.mindRecords.length === 0) {
+          history.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 12px;">
+            아직 기록된 마음 일지가 없습니다.
+          </div>`;
+          return;
+        }
+
+        AppState.mindRecords.slice().reverse().forEach(record => {
+          const div = document.createElement('div');
+          div.className = 'journal-entry';
+          div.innerHTML = `
+            <div class="journal-meta">
+              <span>${record.mood} ${record.date}</span>
+            </div>
+            <div>${this.escapeHtml(record.note)}</div>
+          `;
+          history.appendChild(div);
+        });
+      },
+
+      escapeHtml(str) {
+        return str.replace(/[&<>'"]/g, 
+          tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+      },
+
+      bindEvents() {
+        // 프리셋 클릭
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            AudioEngine.initContext();
+            TimerEngine.selectPreset(btn.dataset.preset);
+          });
+        });
+
+        // 타이머 제어
+        document.getElementById('btnToggleTimer').addEventListener('click', () => {
+          AudioEngine.initContext();
+          TimerEngine.toggle();
+        });
+
+        document.getElementById('btnResetTimer').addEventListener('click', () => {
+          TimerEngine.reset();
+        });
+
+        document.getElementById('btnAddMinute').addEventListener('click', () => {
+          TimerEngine.adjustMinutes(1);
+        });
+
+        document.getElementById('btnSubMinute').addEventListener('click', () => {
+          TimerEngine.adjustMinutes(-1);
+        });
+
+        // 싱잉볼 사운드 테스트
+        document.getElementById('btnTestSound').addEventListener('click', () => {
+          AudioEngine.playSingingBowl();
+        });
+
+        // 음소거 토글
+        const btnMute = document.getElementById('btnToggleMute');
+        btnMute.addEventListener('click', () => {
+          AppState.settings.isMuted = !AppState.settings.isMuted;
+          btnMute.textContent = AppState.settings.isMuted ? '🔇' : '🔊';
+          btnMute.title = AppState.settings.isMuted ? '소리 꺼짐 (시각적 무음 플래시만 작동)' : '소리 켜짐';
+        });
+
+        // 테마 토글
+        document.getElementById('btnToggleTheme').addEventListener('click', () => {
+          const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          AppState.settings.theme = next;
+          StorageEngine.saveTheme(next);
+        });
+
+        // 전체화면 토글
+        const btnFs = document.getElementById('btnFullscreen');
+        const btnExitFs = document.getElementById('btnExitFullscreen');
+        const toggleFullscreen = () => {
+          document.body.classList.toggle('fullscreen-mode');
+        };
+        btnFs.addEventListener('click', toggleFullscreen);
+        btnExitFs.addEventListener('click', toggleFullscreen);
+
+        // 탭 전환
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab).classList.add('active');
+          });
+        });
+
+        // 할일 추가
+        document.getElementById('todoForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const input = document.getElementById('todoInput');
+          const cat = document.getElementById('todoCategory').value;
+          const text = input.value.trim();
+          if (!text) return;
+
+          AppState.todos.unshift({
+            id: Date.now(),
+            text,
+            category: cat,
+            completed: false
+          });
+          input.value = '';
+          StorageEngine.saveTodos();
+          this.renderTodos();
+        });
+
+        // 빠른 템플릿 클릭
+        document.querySelectorAll('.chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            const input = document.getElementById('todoInput');
+            input.value = chip.dataset.template;
+            input.focus();
+          });
+        });
+
+        // 할일 체크 & 삭제 위임
+        document.getElementById('todoList').addEventListener('click', (e) => {
+          const id = Number(e.target.dataset.id);
+          if (!id) return;
+
+          if (e.target.type === 'checkbox') {
+            const item = AppState.todos.find(t => t.id === id);
+            if (item) {
+              item.completed = e.target.checked;
+              StorageEngine.saveTodos();
+              this.renderTodos();
+            }
+          } else if (e.target.classList.contains('todo-btn-del')) {
+            AppState.todos = AppState.todos.filter(t => t.id !== id);
+            StorageEngine.saveTodos();
+            this.renderTodos();
+          }
+        });
+
+        // 마음 기분 선택
+        let selectedMood = '🌿';
+        document.getElementById('moodSelector').addEventListener('click', (e) => {
+          const btn = e.target.closest('.mood-btn');
+          if (!btn) return;
+          document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedMood = btn.textContent;
+        });
+
+        // 마음 일지 저장
+        document.getElementById('btnSaveJournal').addEventListener('click', () => {
+          const input = document.getElementById('journalInput');
+          const note = input.value.trim();
+          if (!note) {
+            alert('오늘의 따뜻한 회고 한 줄을 작성해 주세요.');
+            return;
+          }
+
+          const today = new Date().toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' });
+          AppState.mindRecords.push({
+            id: Date.now(),
+            date: today,
+            mood: selectedMood,
+            note
+          });
+          input.value = '';
+          StorageEngine.saveJournal();
+          this.renderJournal();
+        });
+
+        // 단축키 바인딩
+        window.addEventListener('keydown', (e) => {
+          // input이나 textarea 입력 중에는 단축키 무시
+          if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+            return;
+          }
+
+          if (e.code === 'Space') {
+            e.preventDefault();
+            AudioEngine.initContext();
+            TimerEngine.toggle();
+          } else if (e.code === 'Escape') {
+            if (document.body.classList.contains('fullscreen-mode')) {
+              document.body.classList.remove('fullscreen-mode');
+            } else {
+              TimerEngine.reset();
+            }
+          } else if (e.key === 'f' || e.key === 'F') {
+            toggleFullscreen();
+          }
+        });
+      }
+    };
+
+    // 앱 시작 초기화
+    window.addEventListener('DOMContentLoaded', () => {
+      StorageEngine.load();
+      TimerEngine.init();
+      UIController.init();
+    });
+  </script>
+</body>
+</html>
