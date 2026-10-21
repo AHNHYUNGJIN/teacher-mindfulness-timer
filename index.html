@@ -564,24 +564,28 @@
       font-weight: bold;
     }
 
-    /* 오른쪽 패널 (할일 & 마음 챙김) */
+    /* 오른쪽 패널 (할일 & 마음 챙김 & 성취기준) */
     .tab-nav {
       display: flex;
       border-bottom: 1px solid var(--glass-border-subtle);
       margin-bottom: 16px;
-      gap: 16px;
+      gap: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
+    .tab-nav::-webkit-scrollbar { display: none; }
 
     .tab-btn {
       padding: 10px 4px;
       background: none;
       border: none;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
       position: relative;
       transition: color 0.2s ease;
+      white-space: nowrap;
     }
     .tab-btn.active {
       color: var(--primary);
@@ -596,6 +600,86 @@
       background: var(--primary);
       border-radius: 2px;
       box-shadow: 0 0 8px var(--primary);
+    }
+
+    /* 교육과정 성취기준 카드 스타일 */
+    .curriculum-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      max-height: 380px;
+      padding-right: 2px;
+    }
+
+    .curriculum-card {
+      background: var(--glass-surface-elevated);
+      border: 1px solid var(--glass-border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      box-shadow: var(--glass-specular);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .curriculum-card:hover {
+      border-color: var(--teal);
+    }
+
+    .curriculum-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .curriculum-code {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--teal);
+      background: var(--teal-soft);
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: -0.01em;
+    }
+
+    .curriculum-target {
+      font-size: 0.74rem;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .curriculum-desc {
+      font-size: 0.83rem;
+      color: var(--text-main);
+      line-height: 1.45;
+    }
+
+    .curriculum-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--glass-border-subtle);
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+
+    .btn-copy-chip {
+      background: var(--glass-surface);
+      border: 1px solid var(--glass-border-subtle);
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .btn-copy-chip:hover {
+      background: var(--primary-soft);
     }
 
     /* 탭 콘텐츠 */
@@ -1057,11 +1141,12 @@
       </div>
     </section>
 
-    <!-- 오른쪽: 교직 업무 & 마음 웰니스 -->
+    <!-- 오른쪽: 교직 업무 & 마음 웰니스 & 교육과정 -->
     <section class="card glass-pane" aria-label="할일 및 마음 기록 영역">
       <div class="tab-nav">
-        <button class="tab-btn active" data-tab="tabTodo">📋 교직 할 일 (To-Do)</button>
-        <button class="tab-btn" data-tab="tabMind">🌱 오늘의 마음 챙김 일지</button>
+        <button class="tab-btn active" data-tab="tabTodo">📋 교직 할 일</button>
+        <button class="tab-btn" data-tab="tabMind">🌱 마음 일지</button>
+        <button class="tab-btn" data-tab="tabCurriculum">🎯 교육과정 성취기준</button>
       </div>
 
       <!-- 탭 1: 할 일 목록 -->
@@ -1116,6 +1201,90 @@
           <div style="font-size: 0.82rem; font-weight: 600; margin-top: 4px;">최근 마음 기록</div>
           <div class="journal-history" id="journalHistory">
             <!-- JS 렌더링 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 탭 3: 2022 개정 교육과정 성취기준 연계 가이드 -->
+      <div class="tab-pane" id="tabCurriculum">
+        <div style="font-size: 0.8rem; color: var(--text-sub); margin-bottom: 10px; line-height: 1.4;">
+          💡 <strong>2022 개정 교육과정</strong>에 기반한 교사·학생 마음챙김 및 심신 이완 활동의 성취기준 매핑 가이드입니다. 수업 지도안 및 학급운영 일지에 즉시 인용할 수 있습니다.
+        </div>
+
+        <div class="curriculum-list">
+          <!-- 총론 핵심역량 -->
+          <div class="curriculum-card">
+            <div class="curriculum-header">
+              <span class="curriculum-code">총론 역량</span>
+              <span class="curriculum-target">전 학년 공통</span>
+            </div>
+            <div class="curriculum-desc">
+              <strong>[자기관리 역량]</strong> 자아정체성과 자신감을 바탕으로 자신의 삶을 주도하며, 신체적·정신적 건강과 정서적 안정을 유지하고 조절하는 능력.
+            </div>
+            <div class="curriculum-action">
+              <span>연계: 🧘 수업 전 3분 쉼 (그라운딩 호흡)</span>
+              <button class="btn-copy-chip" onclick="UIController.copyCurriculumText('[2022 개정 교육과정 자기관리 역량] 수업 시작 전 3분 마음챙김 호흡을 통해 정서적 안정과 수업 집중력을 고양함.')">복사</button>
+            </div>
+          </div>
+
+          <!-- 도덕과 성취기준 -->
+          <div class="curriculum-card">
+            <div class="curriculum-header">
+              <span class="curriculum-code">[4도01-02]</span>
+              <span class="curriculum-target">초등 3~4학년 도덕</span>
+            </div>
+            <div class="curriculum-desc">
+              자신의 감정을 조절하고 긍정적인 마음을 기르는 방법을 알고 일상생활에서 실천한다.
+            </div>
+            <div class="curriculum-action">
+              <span>연계: 🌱 마음챙김 일지 & 한 줄 회고</span>
+              <button class="btn-copy-chip" onclick="UIController.copyCurriculumText('[4도01-02] 하루 일과 후 감정 상태를 점검하고 긍정적 자기 피드백을 통해 정서 조절 실천.')">복사</button>
+            </div>
+          </div>
+
+          <!-- 체육과 성취기준 -->
+          <div class="curriculum-card">
+            <div class="curriculum-header">
+              <span class="curriculum-code">[9체01-02]</span>
+              <span class="curriculum-target">중학교 1~3학년 체육</span>
+            </div>
+            <div class="curriculum-desc">
+              신체활동 중 발생하는 스트레스와 긴장을 완화하기 위해 심신 이완 기법(복식호흡, 점진적 이완법)을 실천한다.
+            </div>
+            <div class="curriculum-action">
+              <span>연계: ☕ 쉬는시간 10분 리프레시 (4-7-8 호흡)</span>
+              <button class="btn-copy-chip" onclick="UIController.copyCurriculumText('[9체01-02] 쉬는 시간 4-7-8 이완 호흡을 통해 신체적 피로를 회복하고 심신의 균형을 유지함.')">복사</button>
+            </div>
+          </div>
+
+          <!-- 보건과 성취기준 -->
+          <div class="curriculum-card">
+            <div class="curriculum-header">
+              <span class="curriculum-code">[12보02-01]</span>
+              <span class="curriculum-target">고등학교 보건</span>
+            </div>
+            <div class="curriculum-desc">
+              청소년기 스트레스 및 우울, 번아웃 등 정신건강 문제의 원인을 이해하고 일상생활 속 마음챙김 대처 전략을 수립한다.
+            </div>
+            <div class="curriculum-action">
+              <span>연계: 📋 방과후 25분 집중 및 번아웃 예방</span>
+              <button class="btn-copy-chip" onclick="UIController.copyCurriculumText('[12보02-01] 일상 업무와 학업 스트레스 상황에서 마음챙김 전략을 적용하여 번아웃을 예방함.')">복사</button>
+            </div>
+          </div>
+
+          <!-- 창의적 체험활동 -->
+          <div class="curriculum-card">
+            <div class="curriculum-header">
+              <span class="curriculum-code">창체 자율활동</span>
+              <span class="curriculum-target">초·중·고 공통</span>
+            </div>
+            <div class="curriculum-desc">
+              학급 조종례 및 자율활동 시간을 활용하여 심신의 조화로운 발달을 도모하고 건강하고 안정된 생활 습관을 형성한다.
+            </div>
+            <div class="curriculum-action">
+              <span>연계: 🎒 40/45/50분 집중 수업 및 조종례</span>
+              <button class="btn-copy-chip" onclick="UIController.copyCurriculumText('[창의적 체험활동 자율활동] 학급 일과 시작 시 마음챙김 타이머를 활용하여 차분한 학급 분위기를 조성함.')">복사</button>
+            </div>
           </div>
         </div>
       </div>
@@ -1630,6 +1799,18 @@
         return str.replace(/[&<>'"]/g, 
           tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
         );
+      },
+
+      copyCurriculumText(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            alert('성취기준 연계 문구가 클립보드에 복사되었습니다!\n지도안이나 교직일지에 붙여넣기(Ctrl+V)하세요.');
+          }).catch(() => {
+            prompt('아래 문구를 복사(Ctrl+C)하세요:', text);
+          });
+        } else {
+          prompt('아래 문구를 복사(Ctrl+C)하세요:', text);
+        }
       },
 
       bindEvents() {
