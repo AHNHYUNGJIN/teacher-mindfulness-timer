@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>선생님의 하루 - 교사용 마음챙김 & 일과 관리 타이머</title>
   <!-- Pretendard 폰트 로드 (네트워크 불가 시 시스템 폰트 완벽 폴백) -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
@@ -10,55 +10,80 @@
     :root {
       --font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
       
-      /* 라이트 모드 (따뜻하고 차분한 소프트 웜 톤) */
-      --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #e8edf3 100%);
-      --surface-card: rgba(255, 255, 255, 0.85);
-      --surface-border: rgba(226, 232, 240, 0.9);
-      --surface-hover: rgba(248, 250, 252, 0.95);
+      /* 현실적인 리얼 글래스모피즘 라이트 테마 */
+      --bg-base: #e9eef5;
+      --bg-mesh-1: rgba(186, 215, 255, 0.65);
+      --bg-mesh-2: rgba(220, 205, 255, 0.55);
+      --bg-mesh-3: rgba(190, 242, 235, 0.6);
+      
+      --glass-surface: rgba(255, 255, 255, 0.68);
+      --glass-surface-elevated: rgba(255, 255, 255, 0.82);
+      --glass-border: rgba(255, 255, 255, 0.75);
+      --glass-border-subtle: rgba(255, 255, 255, 0.4);
+      --glass-specular: inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1.5px 1px 0 rgba(0, 0, 0, 0.03);
+      --glass-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.03),
+        0 20px 35px -10px rgba(99, 102, 241, 0.08),
+        0 1px 3px 0 rgba(0, 0, 0, 0.04);
+      
+      --glass-inset: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+
       --text-main: #1e293b;
-      --text-sub: #64748b;
-      --text-muted: #94a3b8;
+      --text-sub: #475569;
+      --text-muted: #8492a6;
       
       --primary: #4f46e5;
       --primary-hover: #4338ca;
-      --primary-soft: rgba(79, 70, 229, 0.1);
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+      --primary-soft: rgba(79, 70, 229, 0.12);
+      --primary-glow: 0 8px 24px -4px rgba(79, 70, 229, 0.4);
       
       --teal: #0d9488;
-      --teal-soft: rgba(13, 148, 136, 0.12);
+      --teal-soft: rgba(13, 148, 136, 0.14);
+      --teal-glow: 0 8px 24px -4px rgba(13, 148, 136, 0.35);
       
       --accent-orange: #ea580c;
       --accent-green: #16a34a;
       --accent-blue: #2563eb;
       
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
-      --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.08);
-      
-      --radius-sm: 8px;
-      --radius-md: 14px;
-      --radius-lg: 20px;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
       --radius-full: 9999px;
     }
 
     [data-theme="dark"] {
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-      --surface-card: rgba(30, 41, 59, 0.8);
-      --surface-border: rgba(51, 65, 85, 0.7);
-      --surface-hover: rgba(51, 65, 85, 0.9);
+      /* 현실적인 리얼 글래스모피즘 다크 테마 */
+      --bg-base: #090d16;
+      --bg-mesh-1: rgba(67, 56, 202, 0.35);
+      --bg-mesh-2: rgba(49, 46, 129, 0.45);
+      --bg-mesh-3: rgba(15, 118, 110, 0.3);
+      
+      --glass-surface: rgba(22, 30, 49, 0.65);
+      --glass-surface-elevated: rgba(30, 41, 67, 0.78);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --glass-border-subtle: rgba(255, 255, 255, 0.07);
+      --glass-specular: inset 0 1px 1px 0 rgba(255, 255, 255, 0.22), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4);
+      --glass-shadow: 
+        0 4px 10px -1px rgba(0, 0, 0, 0.4),
+        0 24px 45px -12px rgba(0, 0, 0, 0.6),
+        0 1px 2px 0 rgba(0, 0, 0, 0.5);
+      
+      --glass-inset: inset 0 2px 5px rgba(0, 0, 0, 0.35);
+
       --text-main: #f8fafc;
       --text-sub: #cbd5e1;
       --text-muted: #64748b;
       
-      --primary: #6366f1;
-      --primary-hover: #818cf8;
-      --primary-soft: rgba(99, 102, 241, 0.2);
+      --primary: #818cf8;
+      --primary-hover: #9ca3af;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
+      --primary-soft: rgba(129, 140, 248, 0.18);
+      --primary-glow: 0 8px 24px -2px rgba(99, 102, 241, 0.5);
       
-      --teal: #14b8a6;
-      --teal-soft: rgba(20, 184, 166, 0.2);
-      
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
-      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
-      --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
+      --teal: #2dd4bf;
+      --teal-soft: rgba(45, 212, 191, 0.18);
+      --teal-glow: 0 8px 24px -2px rgba(45, 212, 191, 0.4);
     }
 
     * {
@@ -66,19 +91,78 @@
       margin: 0;
       padding: 0;
       -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       font-family: var(--font-family);
-      background: var(--bg-gradient);
+      background-color: var(--bg-base);
       color: var(--text-main);
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
-      transition: background 0.3s ease, color 0.3s ease;
+      padding: 16px;
+      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+      transition: background-color 0.4s ease, color 0.4s ease;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* 현실적인 빛 산란을 위한 앰비언트 글로우 오브 (Glass Background Mesh) */
+    .ambient-mesh {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.8;
+      animation: float-orb 22s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+      width: min(500px, 80vw);
+      height: min(500px, 80vw);
+      background: var(--bg-mesh-1);
+      top: -10%;
+      left: -10%;
+      animation-duration: 24s;
+    }
+
+    .orb-2 {
+      width: min(600px, 90vw);
+      height: min(600px, 90vw);
+      background: var(--bg-mesh-2);
+      bottom: -15%;
+      right: -10%;
+      animation-duration: 28s;
+      animation-delay: -5s;
+    }
+
+    .orb-3 {
+      width: min(450px, 70vw);
+      height: min(450px, 70vw);
+      background: var(--bg-mesh-3);
+      top: 35%;
+      left: 30%;
+      animation-duration: 32s;
+      animation-delay: -10s;
+    }
+
+    @keyframes float-orb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, 30px) scale(1.08); }
+      100% { transform: translate(-30px, 50px) scale(0.95); }
     }
 
     /* 시각적 무음 알림 플래시 효과 */
@@ -91,8 +175,8 @@
       pointer-events: none;
       z-index: 9999;
       opacity: 0;
-      transition: opacity 0.5s ease;
-      box-shadow: inset 0 0 80px 30px rgba(99, 102, 241, 0.45);
+      transition: opacity 0.4s ease;
+      box-shadow: inset 0 0 100px 40px rgba(99, 102, 241, 0.5);
     }
     .flash-overlay.active {
       opacity: 1;
@@ -100,34 +184,44 @@
     }
     @keyframes pulse-flash {
       0% { opacity: 0.3; }
-      100% { opacity: 0.9; }
+      100% { opacity: 0.95; }
+    }
+
+    /* 리얼 글래스모피즘 컨테이너 공통 스타일 */
+    .glass-pane {
+      background: var(--glass-surface);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), var(--glass-specular);
+      border-radius: var(--radius-lg);
+      position: relative;
+      z-index: 1;
     }
 
     /* 상단 네비게이션 헤더 */
     .app-header {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1160px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 24px;
-      background: var(--surface-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 24px;
+      padding: 12px 20px;
+      margin-bottom: 16px;
+      border-radius: var(--radius-md);
     }
 
     .brand-section {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
       background: var(--primary-soft);
       color: var(--primary);
       border-radius: var(--radius-md);
@@ -135,123 +229,178 @@
       align-items: center;
       justify-content: center;
       font-size: 20px;
+      box-shadow: var(--glass-specular);
     }
 
     .brand-title {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 700;
       letter-spacing: -0.02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .brand-subtitle {
-      font-size: 0.8rem;
+      font-size: 0.74rem;
       color: var(--text-sub);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     .btn-icon {
-      background: transparent;
-      border: 1px solid var(--surface-border);
+      background: var(--glass-surface-elevated);
+      border: 1px solid var(--glass-border-subtle);
       color: var(--text-sub);
-      width: 38px;
-      height: 38px;
-      border-radius: var(--radius-md);
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03), var(--glass-specular);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 15px;
     }
     .btn-icon:hover {
-      background: var(--surface-hover);
+      background: var(--glass-surface);
       color: var(--text-main);
       transform: translateY(-1px);
     }
+    .btn-icon:active {
+      transform: scale(0.95);
+    }
 
-    /* 메인 컨테이너 */
+    /* 모바일 세그먼트 스위처 (모바일에서 한 손으로 쉽게 탭 전환) */
+    .mobile-segment-control {
+      display: none;
+      width: 100%;
+      max-width: 1160px;
+      background: var(--glass-surface);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-full);
+      padding: 4px;
+      margin-bottom: 14px;
+      box-shadow: var(--glass-inset), var(--glass-shadow);
+      position: relative;
+      z-index: 1;
+    }
+
+    .segment-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-full);
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .segment-btn.active {
+      background: var(--glass-surface-elevated);
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), var(--glass-specular);
+      font-weight: 700;
+    }
+
+    /* 메인 컨테이너 그리드 */
     .main-grid {
       width: 100%;
-      max-width: 1200px;
+      max-width: 1160px;
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
-      gap: 24px;
+      gap: 18px;
       flex: 1;
+      position: relative;
+      z-index: 1;
     }
 
-    @media (max-width: 900px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* 카드 베이스 */
+    /* 카드 패널 */
     .card {
-      background: var(--surface-card);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--radius-lg);
       padding: 24px;
-      box-shadow: var(--shadow-md);
       display: flex;
       flex-direction: column;
       position: relative;
+      overflow: hidden;
     }
 
-    /* 프리셋 탭 바 */
+    /* 프리셋 탭 바 (모바일 가로 스크롤 최적화) */
     .preset-bar {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 20px;
-      scrollbar-width: thin;
+      padding: 4px 2px 10px;
+      margin-bottom: 14px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+    }
+    .preset-bar::-webkit-scrollbar {
+      display: none;
     }
 
     .preset-btn {
       flex: 0 0 auto;
+      scroll-snap-align: start;
       padding: 8px 14px;
-      background: var(--surface-hover);
-      border: 1px solid var(--surface-border);
+      background: var(--glass-surface-elevated);
+      border: 1px solid var(--glass-border-subtle);
       border-radius: var(--radius-full);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--text-sub);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       align-items: center;
       gap: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02), var(--glass-specular);
+      white-space: nowrap;
     }
     .preset-btn:hover {
       color: var(--text-main);
-      border-color: var(--primary);
+      transform: translateY(-1px);
     }
     .preset-btn.active {
-      background: var(--primary);
+      background: var(--primary-gradient);
       color: #ffffff;
-      border-color: var(--primary);
-      box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
+      border-color: transparent;
+      box-shadow: var(--primary-glow);
+      font-weight: 700;
     }
 
-    /* 타이머 디스플레이 */
+    /* 타이머 디스플레이 센터 */
     .timer-center {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px 0 32px;
+      padding: 16px 0 24px;
       position: relative;
     }
 
     .circle-wrap {
       position: relative;
-      width: 290px;
-      height: 290px;
+      width: min(290px, 72vw);
+      height: min(290px, 72vw);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -261,37 +410,41 @@
       width: 100%;
       height: 100%;
       transform: rotate(-90deg);
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.04));
     }
 
     .circle-bg {
       fill: none;
-      stroke: var(--surface-border);
-      stroke-width: 10;
+      stroke: var(--glass-border-subtle);
+      stroke-width: 9;
     }
 
     .circle-progress {
       fill: none;
       stroke: var(--primary);
-      stroke-width: 10;
+      stroke-width: 9;
       stroke-linecap: round;
-      transition: stroke-dashoffset 0.4s ease, stroke 0.4s ease;
+      transition: stroke-dashoffset 0.35s ease, stroke 0.35s ease;
+      filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.4));
     }
 
-    /* 호흡 가이드 원형 애니메이션 펄스 */
+    /* 현실적인 호흡 가이드 버블 (Glass Water Droplet Effect) */
     .breathing-bubble {
       position: absolute;
-      width: 160px;
-      height: 160px;
+      width: 58%;
+      height: 58%;
       border-radius: 50%;
-      background: var(--teal-soft);
-      border: 2px dashed var(--teal);
+      background: radial-gradient(circle, var(--teal-soft) 20%, rgba(20, 184, 166, 0.04) 75%);
+      border: 1.5px solid var(--teal);
+      box-shadow: var(--teal-glow), inset 0 0 20px rgba(20, 184, 166, 0.15);
       display: none;
       align-items: center;
       justify-content: center;
       flex-direction: column;
       text-align: center;
-      transition: transform 4s ease-in-out, background 0.5s ease;
+      transition: transform 4s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s ease;
       pointer-events: none;
+      z-index: 1;
     }
     .breathing-bubble.active {
       display: flex;
@@ -303,94 +456,108 @@
       flex-direction: column;
       align-items: center;
       pointer-events: none;
+      z-index: 2;
     }
 
     .timer-display {
-      font-size: 4rem;
+      font-size: clamp(3rem, 12vw, 4.2rem);
       font-weight: 800;
       letter-spacing: -0.04em;
       font-variant-numeric: tabular-nums;
       line-height: 1;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     }
 
     .timer-mode-badge {
       margin-top: 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
       padding: 4px 12px;
-      background: var(--primary-soft);
+      background: var(--glass-surface-elevated);
       color: var(--primary);
+      border: 1px solid var(--glass-border-subtle);
       border-radius: var(--radius-full);
+      box-shadow: var(--glass-specular);
       display: inline-block;
     }
 
     .timer-breath-guide {
       margin-top: 8px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: var(--teal);
       height: 22px;
+      text-align: center;
     }
 
-    /* 타이머 컨트롤 버튼 */
+    /* 현실적인 리얼 버튼 시스템 */
     .timer-controls {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      margin-top: 10px;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+      width: 100%;
     }
 
     .btn-main {
-      padding: 14px 32px;
-      background: var(--primary);
+      padding: 13px 30px;
+      min-height: 48px;
+      background: var(--primary-gradient);
       color: white;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: var(--radius-full);
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+      box-shadow: var(--primary-glow), var(--glass-specular);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .btn-main:hover {
-      background: var(--primary-hover);
       transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.45);
+      box-shadow: 0 10px 28px -4px rgba(79, 70, 229, 0.55);
     }
     .btn-main:active {
-      transform: translateY(0);
+      transform: scale(0.97) translateY(1px);
     }
 
     .btn-secondary {
-      padding: 12px 18px;
-      background: var(--surface-hover);
-      border: 1px solid var(--surface-border);
+      padding: 11px 16px;
+      min-height: 44px;
+      background: var(--glass-surface-elevated);
+      border: 1px solid var(--glass-border-subtle);
       color: var(--text-main);
       border-radius: var(--radius-full);
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03), var(--glass-specular);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
     .btn-secondary:hover {
-      background: var(--surface-border);
+      background: var(--glass-surface);
+      transform: translateY(-1px);
+    }
+    .btn-secondary:active {
+      transform: scale(0.96);
     }
 
     .shortcut-hint {
-      margin-top: 16px;
-      font-size: 0.76rem;
+      margin-top: 14px;
+      font-size: 0.74rem;
       color: var(--text-muted);
       text-align: center;
     }
     .shortcut-hint kbd {
-      background: var(--surface-border);
+      background: var(--glass-surface-elevated);
+      border: 1px solid var(--glass-border-subtle);
       padding: 2px 6px;
       border-radius: 4px;
       font-family: monospace;
@@ -400,8 +567,8 @@
     /* 오른쪽 패널 (할일 & 마음 챙김) */
     .tab-nav {
       display: flex;
-      border-bottom: 1px solid var(--surface-border);
-      margin-bottom: 18px;
+      border-bottom: 1px solid var(--glass-border-subtle);
+      margin-bottom: 16px;
       gap: 16px;
     }
 
@@ -409,7 +576,7 @@
       padding: 10px 4px;
       background: none;
       border: none;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
@@ -428,6 +595,7 @@
       height: 2px;
       background: var(--primary);
       border-radius: 2px;
+      box-shadow: 0 0 8px var(--primary);
     }
 
     /* 탭 콘텐츠 */
@@ -443,31 +611,34 @@
     /* 할일 영역 */
     .todo-input-group {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       margin-bottom: 12px;
     }
 
     .category-select {
-      padding: 10px 12px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--surface-border);
-      background: var(--surface-hover);
+      padding: 10px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border-subtle);
+      background: var(--glass-surface-elevated);
       color: var(--text-main);
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       outline: none;
+      box-shadow: var(--glass-inset);
     }
 
     .todo-input {
       flex: 1;
-      padding: 10px 14px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--surface-border);
-      background: var(--surface-hover);
+      min-width: 0;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border-subtle);
+      background: var(--glass-surface-elevated);
       color: var(--text-main);
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       outline: none;
+      box-shadow: var(--glass-inset);
       transition: border-color 0.2s ease;
     }
     .todo-input:focus {
@@ -475,68 +646,72 @@
     }
 
     .btn-add {
-      padding: 10px 16px;
-      background: var(--primary);
+      padding: 10px 14px;
+      background: var(--primary-gradient);
       color: white;
       border: none;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-sm);
       font-weight: 600;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.86rem;
+      box-shadow: var(--primary-glow);
     }
 
     /* 교직 추천 빠른 템플릿 */
     .quick-template-chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 14px;
+      gap: 5px;
+      margin-bottom: 12px;
     }
     .chip {
-      font-size: 0.74rem;
-      padding: 4px 10px;
-      background: var(--surface-hover);
-      border: 1px dashed var(--surface-border);
+      font-size: 0.72rem;
+      padding: 4px 9px;
+      background: var(--glass-surface-elevated);
+      border: 1px dashed var(--glass-border-subtle);
       border-radius: var(--radius-full);
       color: var(--text-sub);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s ease;
     }
     .chip:hover {
       background: var(--primary-soft);
       color: var(--primary);
       border-color: var(--primary);
+      border-style: solid;
     }
 
     .todo-list {
       list-style: none;
       overflow-y: auto;
-      max-height: 340px;
+      max-height: 320px;
       padding-right: 4px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 7px;
     }
 
     .todo-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px;
-      background: var(--surface-hover);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      background: var(--glass-surface-elevated);
+      border: 1px solid var(--glass-border-subtle);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--glass-specular);
       transition: all 0.2s ease;
     }
     .todo-item:hover {
-      border-color: var(--primary-soft);
+      border-color: var(--primary);
     }
 
     .todo-item-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex: 1;
+      min-width: 0;
     }
 
     .todo-item.completed .todo-text {
@@ -544,26 +719,35 @@
       color: var(--text-muted);
     }
 
+    .todo-text {
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .category-badge {
-      font-size: 0.7rem;
-      padding: 2px 7px;
+      font-size: 0.68rem;
+      padding: 2px 6px;
       border-radius: 4px;
       font-weight: 600;
       white-space: nowrap;
+      flex-shrink: 0;
     }
-    .badge-class { background: rgba(22, 163, 74, 0.12); color: #15803d; }
-    .badge-admin { background: rgba(37, 99, 235, 0.12); color: #1d4ed8; }
-    .badge-counsel { background: rgba(234, 88, 12, 0.12); color: #c2410c; }
+    .badge-class { background: rgba(22, 163, 74, 0.14); color: #16a34a; }
+    .badge-admin { background: rgba(37, 99, 235, 0.14); color: #2563eb; }
+    .badge-counsel { background: rgba(234, 88, 12, 0.14); color: #ea580c; }
 
     .todo-btn-del {
       background: none;
       border: none;
       color: var(--text-muted);
       cursor: pointer;
-      padding: 4px;
+      padding: 6px;
       border-radius: 4px;
       display: flex;
       align-items: center;
+      flex-shrink: 0;
     }
     .todo-btn-del:hover {
       color: #ef4444;
@@ -573,47 +757,50 @@
     .mind-card {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .mood-selector {
       display: flex;
       justify-content: space-between;
-      background: var(--surface-hover);
-      padding: 10px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--surface-border);
+      background: var(--glass-surface-elevated);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border-subtle);
+      box-shadow: var(--glass-inset);
     }
 
     .mood-btn {
       background: none;
       border: none;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       cursor: pointer;
       padding: 6px;
       border-radius: var(--radius-sm);
-      transition: transform 0.2s ease, background 0.2s ease;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease;
     }
     .mood-btn:hover {
-      transform: scale(1.2);
+      transform: scale(1.22);
     }
     .mood-btn.selected {
       background: var(--primary-soft);
-      transform: scale(1.15);
+      transform: scale(1.18);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
     }
 
     .journal-textarea {
       width: 100%;
-      height: 90px;
-      padding: 12px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--surface-border);
-      background: var(--surface-hover);
+      height: 84px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border-subtle);
+      background: var(--glass-surface-elevated);
       color: var(--text-main);
       font-family: inherit;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       resize: none;
       outline: none;
+      box-shadow: var(--glass-inset);
       transition: border-color 0.2s ease;
     }
     .journal-textarea:focus {
@@ -621,38 +808,119 @@
     }
 
     .journal-history {
-      margin-top: 10px;
+      margin-top: 6px;
       overflow-y: auto;
-      max-height: 180px;
+      max-height: 160px;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
     .journal-entry {
-      font-size: 0.8rem;
-      padding: 10px 12px;
-      background: var(--surface-hover);
+      font-size: 0.78rem;
+      padding: 9px 12px;
+      background: var(--glass-surface-elevated);
       border-left: 3px solid var(--teal);
       border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
       display: flex;
       flex-direction: column;
       gap: 4px;
+      box-shadow: var(--glass-specular);
     }
     .journal-meta {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       display: flex;
       justify-content: space-between;
+    }
+
+    /* =========================================================================
+     * 모바일 최적화 미디어 쿼리 (Responsive & Mobile Viewport)
+     * ========================================================================= */
+    @media (max-width: 860px) {
+      body {
+        padding: 12px 10px;
+      }
+      .app-header {
+        padding: 10px 14px;
+        margin-bottom: 10px;
+      }
+      .brand-title {
+        font-size: 0.98rem;
+      }
+      .brand-subtitle {
+        display: none; /* 모바일에서 간결한 타이틀만 표기 */
+      }
+      .mobile-segment-control {
+        display: flex; /* 모바일 전용 뷰 스위처 활성화 */
+      }
+      .main-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      /* 모바일에서는 세그먼트 스위처 상태에 따라 선택된 패널 우선 표시 */
+      .main-grid.show-timer-only > .card:nth-child(2) {
+        display: none;
+      }
+      .main-grid.show-tasks-only > .card:nth-child(1) {
+        display: none;
+      }
+      .card {
+        padding: 18px 14px;
+        border-radius: var(--radius-md);
+      }
+      .timer-center {
+        padding: 8px 0 18px;
+      }
+      .circle-wrap {
+        width: min(240px, 68vw);
+        height: min(240px, 68vw);
+      }
+      .timer-display {
+        font-size: clamp(2.6rem, 11vw, 3.4rem);
+      }
+      .timer-controls {
+        gap: 6px;
+      }
+      .btn-main {
+        padding: 11px 22px;
+        font-size: 0.95rem;
+        flex: 1 1 140px;
+        justify-content: center;
+      }
+      .btn-secondary {
+        padding: 10px 12px;
+        font-size: 0.8rem;
+      }
+      .shortcut-hint {
+        display: none; /* 모바일 터치 환경에서는 키보드 단축키 힌트 숨김 */
+      }
+    }
+
+    @media (max-width: 420px) {
+      .todo-input-group {
+        flex-wrap: wrap;
+      }
+      .category-select {
+        flex: 1 1 100px;
+      }
+      .todo-input {
+        flex: 2 1 150px;
+      }
+      .btn-add {
+        flex: 1 1 100%;
+      }
     }
 
     /* 전자칠판 전체화면 모드 */
     body.fullscreen-mode {
       padding: 0;
     }
+    body.fullscreen-mode .ambient-mesh,
     body.fullscreen-mode .app-header,
+    body.fullscreen-mode .mobile-segment-control,
     body.fullscreen-mode .main-grid > .card:nth-child(2) {
-      display: none;
+      display: none !important;
     }
     body.fullscreen-mode .main-grid {
       grid-template-columns: 1fr;
@@ -667,17 +935,17 @@
       align-items: center;
     }
     body.fullscreen-mode .circle-wrap {
-      width: 440px;
-      height: 440px;
+      width: min(500px, 85vmin);
+      height: min(500px, 85vmin);
     }
     body.fullscreen-mode .timer-display {
-      font-size: 6.5rem;
+      font-size: clamp(5rem, 15vmin, 7.5rem);
     }
     body.fullscreen-mode .fullscreen-exit-btn {
       display: flex !important;
       position: absolute;
-      top: 24px;
-      right: 24px;
+      top: 20px;
+      right: 20px;
       z-index: 100;
     }
     .fullscreen-exit-btn {
@@ -687,11 +955,18 @@
 </head>
 <body>
 
+  <!-- 빛 산란 앰비언트 글로우 오브 (현실적인 글래스 굴절 배경) -->
+  <div class="ambient-mesh">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
+
   <!-- 시각적 무음 알림 플래시 레이어 -->
   <div id="flashOverlay" class="flash-overlay"></div>
 
   <!-- 상단 네비게이션 헤더 -->
-  <header class="app-header">
+  <header class="app-header glass-pane">
     <div class="brand-section">
       <div class="brand-icon">🌱</div>
       <div>
@@ -719,24 +994,30 @@
     </div>
   </header>
 
+  <!-- 모바일 세그먼트 스위처 (스마트폰 한 손 조작용) -->
+  <nav class="mobile-segment-control" aria-label="모바일 보기 전환">
+    <button class="segment-btn active" id="btnSegTimer" data-view="timer">⏱️ 마음 & 타이머</button>
+    <button class="segment-btn" id="btnSegTasks" data-view="tasks">📋 업무 & 일지</button>
+  </nav>
+
   <!-- 전체화면 탈출 버튼 -->
   <button id="btnExitFullscreen" class="btn-secondary fullscreen-exit-btn">
     ✕ 전체화면 닫기 (ESC)
   </button>
 
-  <!-- 메인 2분할 레이아웃 -->
-  <main class="main-grid">
+  <!-- 메인 레이아웃 -->
+  <main class="main-grid show-timer-only" id="mainGrid">
     
     <!-- 왼쪽: 타이머 & 마음챙김 센터 -->
-    <section class="card" aria-label="타이머 및 마음챙김 영역">
+    <section class="card glass-pane" aria-label="타이머 및 마음챙김 영역">
       <!-- 교직 맞춤 프리셋 바 -->
       <div class="preset-bar" role="tablist">
         <button class="preset-btn active" data-preset="breath3" role="tab">🧘 수업 전 3분 쉼</button>
-        <button class="preset-btn" data-preset="recess10" role="tab">☕ 쉬는시간 10분 리프레시</button>
-        <button class="preset-btn" data-preset="class40" role="tab">🎒 초등수업 40분</button>
-        <button class="preset-btn" data-preset="class45" role="tab">📚 중등수업 45분</button>
-        <button class="preset-btn" data-preset="class50" role="tab">🎓 고등수업 50분</button>
-        <button class="preset-btn" data-preset="admin25" role="tab">📋 방과후 행정 25분</button>
+        <button class="preset-btn" data-preset="recess10" role="tab">☕ 쉬는시간 10분</button>
+        <button class="preset-btn" data-preset="class40" role="tab">🎒 초등 40분</button>
+        <button class="preset-btn" data-preset="class45" role="tab">📚 중등 45분</button>
+        <button class="preset-btn" data-preset="class50" role="tab">🎓 고등 50분</button>
+        <button class="preset-btn" data-preset="admin25" role="tab">📋 방과후 25분</button>
       </div>
 
       <!-- 타이머 및 호흡 디스플레이 -->
@@ -748,7 +1029,7 @@
                     stroke-dasharray="276.46" stroke-dashoffset="0"></circle>
           </svg>
           
-          <!-- 호흡 유도 버블 (수업 전 쉼/쉬는시간 호흡 모드 시 활성화) -->
+          <!-- 현실적인 굴절 호흡 버블 -->
           <div class="breathing-bubble" id="breathingBubble"></div>
 
           <!-- 타이머 텍스트 -->
@@ -777,7 +1058,7 @@
     </section>
 
     <!-- 오른쪽: 교직 업무 & 마음 웰니스 -->
-    <section class="card" aria-label="할일 및 마음 기록 영역">
+    <section class="card glass-pane" aria-label="할일 및 마음 기록 영역">
       <div class="tab-nav">
         <button class="tab-btn active" data-tab="tabTodo">📋 교직 할 일 (To-Do)</button>
         <button class="tab-btn" data-tab="tabMind">🌱 오늘의 마음 챙김 일지</button>
@@ -800,7 +1081,7 @@
             <option value="admin">행정 공문</option>
             <option value="counsel">학생/상담</option>
           </select>
-          <input type="text" class="todo-input" id="todoInput" placeholder="오늘 완수할 교직 업무를 입력하세요..." required>
+          <input type="text" class="todo-input" id="todoInput" placeholder="오늘 완수할 교직 업무..." required>
           <button type="submit" class="btn-add">추가</button>
         </form>
 
@@ -814,7 +1095,7 @@
       <div class="tab-pane" id="tabMind">
         <div class="mind-card">
           <div>
-            <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">오늘 선생님의 마음 상태는 어떤가요?</div>
+            <div style="font-size: 0.82rem; font-weight: 600; margin-bottom: 6px;">오늘 선생님의 마음 상태는 어떤가요?</div>
             <div class="mood-selector" id="moodSelector">
               <button class="mood-btn" data-mood="맑음" title="활기차고 맑음">☀️</button>
               <button class="mood-btn selected" data-mood="차분함" title="평온하고 차분함">🌿</button>
@@ -825,14 +1106,14 @@
           </div>
 
           <div>
-            <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">수업 후 나를 위한 칭찬 또는 한 줄 회고</div>
+            <div style="font-size: 0.82rem; font-weight: 600; margin-bottom: 6px;">수업 후 나를 위한 칭찬 또는 한 줄 회고</div>
             <textarea class="journal-textarea" id="journalInput" placeholder="오늘도 아이들을 위해 최선을 다한 나에게 따뜻한 한 줄을 남겨주세요."></textarea>
-            <button class="btn-secondary" id="btnSaveJournal" style="margin-top: 8px; width: 100%; justify-content: center;">
+            <button class="btn-secondary" id="btnSaveJournal" style="margin-top: 6px; width: 100%; justify-content: center;">
               💾 마음 일지 안전하게 기록하기 (로컬 저장)
             </button>
           </div>
 
-          <div style="font-size: 0.85rem; font-weight: 600; margin-top: 4px;">최근 마음 기록</div>
+          <div style="font-size: 0.82rem; font-weight: 600; margin-top: 4px;">최근 마음 기록</div>
           <div class="journal-history" id="journalHistory">
             <!-- JS 렌더링 -->
           </div>
@@ -868,8 +1149,9 @@
       // 환경 설정 (로컬 저장)
       settings: {
         theme: 'light',         // 'light' | 'dark'
-        soundEnabled: true,     // Web Audio API 소리 재생 여부 (false면 시각적 무음 플래시만)
-        isMuted: false
+        soundEnabled: true,     // Web Audio API 소리 재생 여부
+        isMuted: false,
+        mobileView: 'timer'     // 'timer' | 'tasks' (모바일 뷰 스위처)
       },
       // 교직 할일 목록
       todos: [],
@@ -885,11 +1167,11 @@
     const TimerEngine = {
       PRESETS: {
         breath3:  { name: '수업 전 3분 쉼', seconds: 180, isBreathing: true, badgeClass: 'badge-counsel' },
-        recess10: { name: '쉬는시간 10분 리프레시', seconds: 600, isBreathing: true, badgeClass: 'badge-class' },
-        class40:  { name: '초등수업 40분', seconds: 2400, isBreathing: false, badgeClass: 'badge-admin' },
-        class45:  { name: '중등수업 45분', seconds: 2700, isBreathing: false, badgeClass: 'badge-admin' },
-        class50:  { name: '고등수업 50분', seconds: 3000, isBreathing: false, badgeClass: 'badge-admin' },
-        admin25:  { name: '방과후 행정 25분', seconds: 1500, isBreathing: false, badgeClass: 'badge-counsel' }
+        recess10: { name: '쉬는시간 10분', seconds: 600, isBreathing: true, badgeClass: 'badge-class' },
+        class40:  { name: '초등 40분', seconds: 2400, isBreathing: false, badgeClass: 'badge-admin' },
+        class45:  { name: '중등 45분', seconds: 2700, isBreathing: false, badgeClass: 'badge-admin' },
+        class50:  { name: '고등 50분', seconds: 3000, isBreathing: false, badgeClass: 'badge-admin' },
+        admin25:  { name: '방과후 25분', seconds: 1500, isBreathing: false, badgeClass: 'badge-counsel' }
       },
 
       init() {
@@ -934,7 +1216,7 @@
         AppState.timer.isRunning = true;
         AppState.timer.targetEndTime = Date.now() + (AppState.timer.remainingSeconds * 1000);
 
-        // 정밀 드리프트 보정 타이머 루프 (백그라운드 스로틀링 대응)
+        // 정밀 드리프트 보정 타이머 루프
         clearInterval(AppState.timer.intervalId);
         AppState.timer.intervalId = setInterval(() => {
           this.tick();
@@ -1019,15 +1301,12 @@
         }
       },
 
-      // Web Audio API 기반 티베탄 싱잉볼 / 명상 종소리 합성 (외부 오디오 파일 불필요)
       playSingingBowl() {
         try {
           this.initContext();
           if (!this.audioCtx) return;
 
           const now = this.audioCtx.currentTime;
-          
-          // 기본 화음 구성 (맑고 차분한 F#음 기준: 370Hz, 배음 740Hz, 1110Hz)
           const baseFreq = 370;
           const harmonics = [
             { freq: baseFreq, gain: 0.5, decay: 3.5 },
@@ -1060,7 +1339,7 @@
     };
 
     /**
-     * 호흡 가이드 컨트롤러 (4-7-8 호흡 테크닉)
+     * 호흡 가이드 컨트롤러 (4-7-8 테크닉)
      */
     const BreathingController = {
       timerId: null,
@@ -1070,7 +1349,6 @@
         { name: '내쉬기 (입으로 천천히)', duration: 8, scale: 0.85, text: '입으로 부드럽게 숨을 내쉽니다 (8초)' }
       ],
       currentIdx: 0,
-      phaseTimeLeft: 4,
 
       start() {
         const bubble = document.getElementById('breathingBubble');
@@ -1122,20 +1400,17 @@
     };
 
     /**
-     * 알림 엔진 (시각적 플래시 및 무음 토스트)
+     * 알림 엔진
      */
     const NotificationEngine = {
       notify() {
-        // 시각적 무음 알림 플래시
         const overlay = document.getElementById('flashOverlay');
         overlay.classList.add('active');
 
-        // 소리가 활성화되어 있다면 종소리 재생
         if (AppState.settings.soundEnabled && !AppState.settings.isMuted) {
           AudioEngine.playSingingBowl();
         }
 
-        // 3초 후 시각 플래시 자동 해제
         setTimeout(() => {
           this.stopFlash();
         }, 3600);
@@ -1149,7 +1424,7 @@
 
     /**
      * =========================================================================
-     * [Agent C — 교직 특화 데이터 모델 & 안전성 검증 (Storage & Context)]
+     * [Agent C — 로컬 데이터 모델 & 안전성 검증 (Storage & Context)]
      * =========================================================================
      */
     const StorageEngine = {
@@ -1171,7 +1446,7 @@
           AppState.settings.theme = savedTheme;
           document.documentElement.setAttribute('data-theme', savedTheme);
         } catch (e) {
-          console.warn('LocalStorage access issue, fallback to memory', e);
+          console.warn('LocalStorage fallback to memory', e);
           AppState.todos = this.getDefaultTodos();
           AppState.mindRecords = this.getDefaultJournal();
         }
@@ -1249,18 +1524,15 @@
 
         display.textContent = this.formatTime(remaining);
 
-        // 원형 진행률 계산
         const ratio = total > 0 ? remaining / total : 0;
         const offset = this.circumference * (1 - ratio);
         progress.style.strokeDashoffset = offset;
 
-        // 모드 뱃지
         const conf = TimerEngine.PRESETS[AppState.timer.preset];
         if (conf) {
           badge.textContent = conf.name;
         }
 
-        // 브라우저 탭 타이틀에 남은 시간 표시
         document.title = `${this.formatTime(remaining)} - 선생님의 하루`;
       },
 
@@ -1272,11 +1544,13 @@
         if (isRunning) {
           icon.textContent = '⏸';
           label.textContent = '일시정지';
-          btnMain.style.background = '#ea580c'; // 일시정지 시 차분한 오렌지
+          btnMain.style.background = 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)';
+          btnMain.style.boxShadow = '0 8px 24px -4px rgba(234, 88, 12, 0.45)';
         } else {
           icon.textContent = '▶';
           label.textContent = '시작하기';
           btnMain.style.background = '';
+          btnMain.style.boxShadow = '';
         }
       },
 
@@ -1284,6 +1558,7 @@
         document.querySelectorAll('.preset-btn').forEach(btn => {
           if (btn.dataset.preset === activeKey) {
             btn.classList.add('active');
+            btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
           } else {
             btn.classList.remove('active');
           }
@@ -1295,7 +1570,7 @@
         list.innerHTML = '';
 
         if (AppState.todos.length === 0) {
-          list.innerHTML = `<li style="text-align: center; color: var(--text-muted); padding: 24px; font-size: 0.85rem;">
+          list.innerHTML = `<li style="text-align: center; color: var(--text-muted); padding: 20px; font-size: 0.82rem;">
             등록된 할일이 없습니다. 여유로운 마음으로 하루를 보내세요. 🌱
           </li>`;
           return;
@@ -1317,11 +1592,11 @@
 
           li.innerHTML = `
             <div class="todo-item-left">
-              <input type="checkbox" ${todo.completed ? 'checked' : ''} data-id="${todo.id}" style="cursor: pointer; width: 16px; height: 16px;">
+              <input type="checkbox" ${todo.completed ? 'checked' : ''} data-id="${todo.id}" style="cursor: pointer; width: 17px; height: 17px; flex-shrink: 0; accent-color: var(--primary);">
               <span class="category-badge ${badgeClass}">${badgeText}</span>
-              <span class="todo-text" style="font-size: 0.88rem;">${this.escapeHtml(todo.text)}</span>
+              <span class="todo-text">${this.escapeHtml(todo.text)}</span>
             </div>
-            <button class="todo-btn-del" data-id="${todo.id}" title="삭제">✕</button>
+            <button class="todo-btn-del" data-id="${todo.id}" title="삭제" aria-label="삭제">✕</button>
           `;
           list.appendChild(li);
         });
@@ -1332,7 +1607,7 @@
         history.innerHTML = '';
 
         if (AppState.mindRecords.length === 0) {
-          history.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 12px;">
+          history.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 0.78rem; padding: 12px;">
             아직 기록된 마음 일지가 없습니다.
           </div>`;
           return;
@@ -1384,7 +1659,7 @@
           TimerEngine.adjustMinutes(-1);
         });
 
-        // 싱잉볼 사운드 테스트
+        // 사운드 테스트
         document.getElementById('btnTestSound').addEventListener('click', () => {
           AudioEngine.playSingingBowl();
         });
@@ -1413,6 +1688,25 @@
         };
         btnFs.addEventListener('click', toggleFullscreen);
         btnExitFs.addEventListener('click', toggleFullscreen);
+
+        // 모바일 세그먼트 스위처 클릭 핸들러
+        const mainGrid = document.getElementById('mainGrid');
+        const btnSegTimer = document.getElementById('btnSegTimer');
+        const btnSegTasks = document.getElementById('btnSegTasks');
+
+        btnSegTimer.addEventListener('click', () => {
+          btnSegTimer.classList.add('active');
+          btnSegTasks.classList.remove('active');
+          mainGrid.classList.add('show-timer-only');
+          mainGrid.classList.remove('show-tasks-only');
+        });
+
+        btnSegTasks.addEventListener('click', () => {
+          btnSegTasks.classList.add('active');
+          btnSegTimer.classList.remove('active');
+          mainGrid.classList.add('show-tasks-only');
+          mainGrid.classList.remove('show-timer-only');
+        });
 
         // 탭 전환
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1504,7 +1798,6 @@
 
         // 단축키 바인딩
         window.addEventListener('keydown', (e) => {
-          // input이나 textarea 입력 중에는 단축키 무시
           if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
             return;
           }
